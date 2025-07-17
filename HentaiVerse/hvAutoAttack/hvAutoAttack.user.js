@@ -2180,10 +2180,10 @@ try {
     return g('encounter', setValue('encounter', encounter));
   }
 
-  function getEncounter() {
-    const getToday = (encounter) => encounter.filter(e => time(2, e.time) === time(2));
-    const current = g('encounter') ?? [];
-    let encounter = getValue('encounter', true) ?? [];
+function getEncounter() {
+    const getToday = (encounter) => Array.isArray(encounter) ? encounter.filter(e => time(2, e.time) === time(2)) : [];
+    const current = Array.isArray(g('encounter')) ? g('encounter') : [];
+    let encounter = Array.isArray(getValue('encounter', true)) ? getValue('encounter', true) : [];
     if (JSON.stringify(current) === JSON.stringify(encounter)) {
       return getToday(encounter);
     }
@@ -2198,7 +2198,8 @@ try {
       dict[key].encountered = (e.encountered || dict[key].encountered) ? Math.max(dict[key].encountered ?? 0, e.encountered ?? 0) : undefined;
     }
     return getToday(Object.values(dict)).sort((x, y) => x.time < y.time ? 1 : x.time > y.time ? -1 : 0);
-  }
+}
+
 
   function quickSite() { // 快捷站点
     const quickSiteBar = gE('body').appendChild(cE('div'));
